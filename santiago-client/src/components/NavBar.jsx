@@ -1,0 +1,122 @@
+import { NavLink } from 'react-router-dom';
+import { useState } from 'react';
+import { useAuth } from '../assets/context/AuthContext';
+
+const links = [
+  { label: 'Home', to: '/' },
+  { label: 'About', to: '/about' },
+  { label: 'Articles', to: '/articles' },
+];
+
+const navLinkClassName = ({ isActive }) =>
+  [
+    'rounded-full border-2 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] transition focus:outline-none focus:ring-2 focus:ring-zinc-900',
+    isActive
+      ? 'border-zinc-900 bg-zinc-900 text-zinc-50'
+      : 'border-transparent text-zinc-500 hover:border-zinc-900 hover:bg-zinc-50 hover:text-zinc-900',
+  ].join(' ');
+
+const NavBar = () => {
+  const { user, signOut } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  return (
+    <header className="fixed inset-x-0 top-0 z-50 border-b-2 border-zinc-900 bg-zinc-100/95 backdrop-blur">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+        <NavLink to="/" className="flex items-center gap-3">
+          <img
+            src="/src/assets/EJS-logo.png"
+            alt="EJS Logo"
+            className="h-20 w-20 object-contain"
+          />
+          <div className="space-y-0.5">
+            <p className="text-xl font-bold text-zinc-900">EJS Corporation</p>
+          </div>
+        </NavLink>
+
+        {/* Desktop Nav */}
+        <div className="hidden items-center gap-2 md:flex">
+          {links.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              end={link.to === '/'}
+              className={navLinkClassName}
+            >
+              {link.label}
+            </NavLink>
+          ))}
+          {user ? (
+            <div className="ml-4 flex items-center gap-3">
+              <span className="text-sm text-zinc-600">Hi, {user.name}</span>
+              <button
+                onClick={signOut}
+                className="rounded-full border-2 border-zinc-900 bg-zinc-900 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-white transition hover:bg-zinc-700"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <NavLink to="/auth/signin" className={navLinkClassName}>
+              Sign In
+            </NavLink>
+          )}
+        </div>
+
+        {/* Mobile Menu Toggle */}
+        <button
+          className="md:hidden rounded-full border-2 border-zinc-900 px-3 py-2 text-xs font-semibold uppercase tracking-wide"
+          onClick={() => setMenuOpen(!menuOpen)}
+          aria-label="Toggle menu"
+        >
+          {menuOpen ? 'Close' : 'Menu'}
+        </button>
+      </div>
+
+      {/* Mobile Nav */}
+      {menuOpen && (
+        <nav
+          className="flex flex-col items-center gap-2 border-t-2 border-zinc-900 bg-zinc-100 py-4 md:hidden"
+          role="navigation"
+          aria-label="Mobile Navigation"
+        >
+          {links.map((link) => (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              end={link.to === '/'}
+              className={navLinkClassName}
+              onClick={() => setMenuOpen(false)}
+            >
+              {link.label}
+            </NavLink>
+          ))}
+          {user ? (
+            <>
+              <span className="text-sm text-zinc-600 py-1">Hi, {user.name}</span>
+              <button
+                onClick={() => {
+                  signOut();
+                  setMenuOpen(false);
+                }}
+                className="rounded-full border-2 border-zinc-900 bg-zinc-900 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.24em] text-white transition hover:bg-zinc-700"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <NavLink
+              to="/auth/signin"
+              className={navLinkClassName}
+              onClick={() => setMenuOpen(false)}
+            >
+              Sign In
+            </NavLink>
+          )}
+        </nav>
+      )}
+    </header>
+  );
+};
+
+export default NavBar;

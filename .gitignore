@@ -1,0 +1,8 @@
+node_modules/
+.DS_Store
+dist
+.env
+*.log
+santiago-client/node_modules/
+santiago-client/src/assets/context/.git
+
