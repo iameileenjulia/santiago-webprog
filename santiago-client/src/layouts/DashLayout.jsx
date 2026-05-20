@@ -85,6 +85,12 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
+const drawerPaperBase = {
+  backgroundColor: "#fafafa",
+  borderRight: "1px solid #e4e4e7",
+  boxShadow: "2px 0 12px rgba(0,0,0,0.03)",
+};
+
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
@@ -94,17 +100,12 @@ const Drawer = styled(MuiDrawer, {
   boxSizing: "border-box",
   ...(open && {
     ...openedMixin(theme),
-    "& .MuiDrawer-paper": openedMixin(theme),
+    "& .MuiDrawer-paper": { ...openedMixin(theme), ...drawerPaperBase },
   }),
   ...(!open && {
     ...closedMixin(theme),
-    "& .MuiDrawer-paper": closedMixin(theme),
+    "& .MuiDrawer-paper": { ...closedMixin(theme), ...drawerPaperBase },
   }),
-  "& .MuiDrawer-paper": {
-    backgroundColor: "#fafafa",
-    borderRight: "1px solid #e4e4e7",
-    boxShadow: "2px 0 12px rgba(0,0,0,0.03)",
-  },
 }));
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
