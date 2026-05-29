@@ -1,12 +1,10 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Button from '../../components/Button';
-import { useAuth } from '../../assets/context/AuthContext';
+import { createUser } from '../../services/UserService';
 
 const SignUpPage = () => {
   const navigate = useNavigate();
-  const { signUp } = useAuth();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -97,10 +95,18 @@ const SignUpPage = () => {
     if (isValid) {
       setIsLoading(true);
       try {
-        await signUp(formData.firstName, formData.lastName, formData.email, formData.password);
-        navigate('/');
+        const username = formData.email.split('@')[0];
+        await createUser({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          password: formData.password,
+          username,
+          type: 'viewer',
+        });
+        navigate('/auth/signin');
       } catch (error) {
-        alert(error.message);
+        alert(error.response?.data?.message || error.message);
       } finally {
         setIsLoading(false);
       }

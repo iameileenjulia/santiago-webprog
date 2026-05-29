@@ -1,17 +1,16 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Button from '../../components/Button';
-import { useAuth } from '../../assets/context/AuthContext';
+import { loginUser } from '../../services/UserService';
 
 const SignInPage = () => {
   const navigate = useNavigate();
-  const { signIn } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const validateEmail = (email) => {
@@ -42,10 +41,22 @@ const SignInPage = () => {
     if (isValid) {
       setIsLoading(true);
       try {
-        await signIn(email, password);
-        navigate('/');
-      } catch (error) {
-        alert(error.message);
+        const { data } = await loginUser({ email, password });
+        console.log('Login successful:', data);
+
+        if (data.type === 'viewer') {
+          setError('Viewers are not allowed to log in.');
+          return;
+        }
+
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('firstName', data.firstName);
+        localStorage.setItem('type', data.type);
+
+        navigate('/dashboard', { state: { firstName: data.firstName, type: data.type } });
+      } catch (err) {
+        console.error('Login failed:', err.response?.data?.message || err.message);
+        setError(err.response?.data?.message || 'Login failed. Please try again.');
       } finally {
         setIsLoading(false);
       }
@@ -65,6 +76,8 @@ const SignInPage = () => {
           Sign in to access your account and explore the future of construction.
         </p>
       </div>
+
+      {error && <p className="mb-4 text-center text-sm text-red-600">{error}</p>}
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>

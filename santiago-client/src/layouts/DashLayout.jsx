@@ -23,6 +23,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PeopleIcon from "@mui/icons-material/People";
 import AssessmentIcon from "@mui/icons-material/Assessment";
+import ArticleIcon from "@mui/icons-material/Article";
 import Button from "@mui/material/Button";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import Avatar from "@mui/material/Avatar";
@@ -30,10 +31,11 @@ import { useAuth } from "../assets/context/AuthContext";
 
 const drawerWidth = 240;
 
-const dashboardNavItems = [
-  { label: "Dashboard", title: "Dashboard", to: "/dashboard", icon: DashboardIcon },
-  { label: "Reports",   title: "Reports",   to: "/dashboard/reports", icon: AssessmentIcon },
-  { label: "Users",     title: "Users",     to: "/dashboard/users",   icon: PeopleIcon },
+const allNavItems = [
+  { label: "Dashboard", title: "Dashboard", to: "/dashboard",          icon: DashboardIcon, roles: ['admin', 'editor'] },
+  { label: "Reports",   title: "Reports",   to: "/dashboard/reports",  icon: AssessmentIcon, roles: ['admin', 'editor'] },
+  { label: "Articles",  title: "Articles",  to: "/dashboard/articles", icon: ArticleIcon,    roles: ['admin', 'editor'] },
+  { label: "Users",     title: "Users",     to: "/dashboard/users",    icon: PeopleIcon,     roles: ['admin'] },
 ];
 
 const openedMixin = (theme) => ({
@@ -148,8 +150,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-const getPageTitle = (pathname) => 
-  dashboardNavItems.find(({ to }) => to === pathname)?.title ?? "Overview";
+const getPageTitle = (pathname) =>
+  allNavItems.find(({ to }) => to === pathname)?.title ?? "Overview";
 
 const DashLayout = () => {
   const theme = useTheme();
@@ -158,6 +160,8 @@ const DashLayout = () => {
   const pageTitle = getPageTitle(location.pathname);
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const userType = localStorage.getItem('type');
+  const dashboardNavItems = allNavItems.filter(item => item.roles.includes(userType));
 
   const handleDrawerOpen = () => setOpen(true);
   const handleDrawerClose = () => setOpen(false);
@@ -196,9 +200,9 @@ const DashLayout = () => {
           <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             <Box sx={{ display: { xs: "none", sm: "flex" }, alignItems: "center", gap: 1 }}>
               <Avatar sx={{ width: 32, height: 32, bgcolor: "#10b981", fontSize: "0.9rem" }}>
-                {user?.name?.charAt(0) || "U"}
+                {user?.firstName?.charAt(0) || "U"}
               </Avatar>
-              <Typography variant="body2" sx={{ color: "#e4e4e7" }}>{user?.name || "User"}</Typography>
+              <Typography variant="body2" sx={{ color: "#e4e4e7" }}>{user?.firstName || "User"}</Typography>
             </Box>
             <Button 
               variant="outlined" 

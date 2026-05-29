@@ -1,15 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from '../../components/Button';
 import ArticleList from '../../components/ArticleList.jsx';
-import articles from '../../assets/article-content.js';
+import { fetchArticles } from '../../services/ArticleService';
 
 const ArticleListPage = () => {
-  const categories = ['All', 'Innovation', 'Technology', 'Sustainability', 'Engineering'];
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredArticles = selectedCategory === 'All'
-    ? articles
-    : articles.filter(article => article.category === selectedCategory);
+  useEffect(() => {
+    fetchArticles()
+      .then(({ data }) => {
+        // Map backend shape to what ArticleList expects
+        const active = data.articles
+          .filter((a) => a.isActive)
+          .map((a) => ({ name: a.slug, title: a.title, content: [a.content] }));
+        setArticles(active);
+      })
+      .catch((err) => console.error('Error loading articles:', err))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filteredArticles = articles;
 
   return (
     <div className="flex w-full flex-col">
@@ -42,27 +53,6 @@ const ArticleListPage = () => {
         </div>
       </section>
 
-      {/* Categories Filter */}
-      <section className="border-b border-zinc-200 bg-white px-4 py-6 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            {categories.map((category, idx) => (
-              <button
-                key={idx}
-                onClick={() => setSelectedCategory(category)}
-                className={`rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-wide transition-all ${
-                  selectedCategory === category
-                    ? 'bg-emerald-600 text-white'
-                    : 'border border-zinc-200 bg-white text-zinc-600 hover:border-emerald-500 hover:text-emerald-600'
-                }`}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Articles Grid */}
       <section className="px-4 py-16 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
@@ -73,8 +63,14 @@ const ArticleListPage = () => {
             </div>
             <p className="text-sm text-zinc-500">{filteredArticles.length} articles</p>
           </div>
-          
-          <ArticleList articles={filteredArticles} />
+
+          {loading ? (
+            <p className="text-center text-zinc-500">Loading articles...</p>
+          ) : filteredArticles.length === 0 ? (
+            <p className="text-center text-zinc-500">No articles published yet.</p>
+          ) : (
+            <ArticleList articles={filteredArticles} />
+          )}
         </div>
       </section>
 
