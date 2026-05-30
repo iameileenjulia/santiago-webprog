@@ -1,4 +1,5 @@
 import { Outlet } from 'react-router-dom';
+import ejsLogo from '../assets/EJS-logo.png';
 
 const AuthLayout = () => {
   return (
@@ -15,7 +16,7 @@ const AuthLayout = () => {
           
           <div className="relative z-10 max-w-md text-center text-white">
             <div className="mb-8 flex justify-center">
-              <img src="/src/assets/EJS-logo.png" alt="EJS Corp" className="h-24 w-24 object-contain brightness-0 invert" />
+              <img src={ejsLogo} alt="EJS Corp" className="h-24 w-24 object-contain brightness-0 invert" />
             </div>
             <h2 className="text-3xl font-bold">Building the Future Together</h2>
             <p className="mt-4 text-zinc-300">

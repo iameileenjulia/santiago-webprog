@@ -1,5 +1,6 @@
 // AboutPage.jsx
 import Button from '../../components/Button';
+import arqTekAbout from '../../assets/ArqTek-about.png';
 
 const AboutPage = () => {
   const stats = [
@@ -58,7 +59,7 @@ const AboutPage = () => {
             <div className="relative">
               <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-emerald-500 to-cyan-500 opacity-30 blur-xl" />
               <div className="relative overflow-hidden rounded-2xl border border-zinc-700 bg-zinc-800/50 backdrop-blur-sm">
-                <img src="/src/assets/ArqTek-about.png" alt="About ArqTek" className="w-full object-cover" />
+                <img src={arqTekAbout} alt="About ArqTek" className="w-full object-cover" />
               </div>
             </div>
           </div>

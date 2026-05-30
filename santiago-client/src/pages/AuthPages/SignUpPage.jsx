@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import Button from '../../components/Button';
 import { createUser } from '../../services/UserService';
+import ejsLogo from '../../assets/EJS-logo.png';
 
 const SignUpPage = () => {
   const navigate = useNavigate();
@@ -121,7 +122,7 @@ const SignUpPage = () => {
     <div className="w-full">
       <div className="mb-8 text-center">
         <div className="mb-4 flex justify-center">
-          <img src="/src/assets/EJS-logo.png" alt="EJS Logo" className="h-16 w-16 object-contain" />
+          <img src={ejsLogo} alt="EJS Logo" className="h-16 w-16 object-contain" />
         </div>
         <h1 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl">
           Create an Account

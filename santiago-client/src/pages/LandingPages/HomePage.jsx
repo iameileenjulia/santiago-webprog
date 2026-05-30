@@ -1,5 +1,7 @@
 // HomePage.jsx
 import Button from '../../components/Button.jsx';
+import ejsLogo from '../../assets/EJS-logo.png';
+import arqTekHero from '../../assets/ArqTek-hero.png';
 
 const HomePage = () => {
   return (
@@ -18,7 +20,7 @@ const HomePage = () => {
             <div className="text-center lg:text-left">
               <div className="inline-flex items-center rounded-full border border-zinc-600 bg-zinc-800/50 px-4 py-1.5 backdrop-blur-sm">
                 <img 
-                  src="/src/assets/EJS-logo.png" 
+                  src={ejsLogo} 
                   alt="EJS Logo" 
                   className="mr-2 h-5 w-5 object-contain"
                 />
@@ -65,7 +67,7 @@ const HomePage = () => {
               <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-emerald-500 to-cyan-500 opacity-30 blur-xl" />
               <div className="relative overflow-hidden rounded-2xl border border-zinc-700 bg-zinc-800/50 backdrop-blur-sm">
                 <img
-                  src="/src/assets/ArqTek-hero.png"
+                  src={arqTekHero}
                   alt="Arqtek Hero"
                   className="w-full object-cover"
                 />
@@ -80,7 +82,7 @@ const HomePage = () => {
         <div className="mx-auto max-w-4xl text-center">
           <div className="mb-4 flex justify-center">
             <img 
-              src="/src/assets/EJS-logo.png" 
+              src={ejsLogo} 
               alt="EJS Logo" 
               className="h-16 w-16 object-contain opacity-80"
             />
@@ -184,7 +186,7 @@ const HomePage = () => {
         
         <div className="relative mx-auto max-w-4xl text-center">
           <div className="mb-6 flex justify-center">
-            <img src="/src/assets/EJS-logo.png" alt="EJS Logo" className="h-20 w-20 object-contain brightness-0 invert opacity-80" />
+            <img src={ejsLogo} alt="EJS Logo" className="h-20 w-20 object-contain brightness-0 invert opacity-80" />
           </div>
           <h2 className="text-3xl font-bold text-white sm:text-4xl">Ready to Build the Future Together?</h2>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-zinc-300">Let's discuss how ArqTek can bring innovation to your next project.</p>

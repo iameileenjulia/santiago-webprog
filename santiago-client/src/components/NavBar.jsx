@@ -1,6 +1,7 @@
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../assets/context/AuthContext';
+import ejsLogo from '../assets/EJS-logo.png';
 
 const links = [
   { label: 'Home', to: '/' },
@@ -25,7 +26,7 @@ const NavBar = () => {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
         <NavLink to="/" className="flex items-center gap-3">
           <img
-            src="/src/assets/EJS-logo.png"
+            src={ejsLogo}
             alt="EJS Logo"
             className="h-20 w-20 object-contain"
           />
